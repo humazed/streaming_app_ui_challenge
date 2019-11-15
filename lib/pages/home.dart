@@ -11,9 +11,12 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: buildBottomNavigationBar(),
       body: ListView(
         children: <Widget>[
           buildStories(),
@@ -485,6 +488,52 @@ class HomePageState extends State<HomePage> {
           ),
         ),
       ],
+    );
+  }
+
+  BottomNavigationBar buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      showSelectedLabels: false,
+      showUnselectedLabels: false,
+      items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.play_circle_filled),
+          title: SizedBox(height: 0),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.search),
+          title: SizedBox(height: 0),
+        ),
+        BottomNavigationBarItem(
+          icon: Stack(
+            children: [
+              Icon(Icons.notifications),
+              PositionedDirectional(
+                end: 0,
+                top: 0,
+                child: Container(
+                  padding: EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          title: SizedBox(height: 0),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          title: SizedBox(height: 0),
+        ),
+      ],
+      currentIndex: _selectedIndex,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Color(0xFF91979A),
+      onTap: (index) {
+        setState(() => _selectedIndex = index);
+      },
     );
   }
 }

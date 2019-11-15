@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Streaming app ui challange',
       theme: appTheme,
+      debugShowCheckedModeBanner: false,
       home: MultiProvider(
         providers: [
           ChangeNotifierProvider(builder: (_) => PointsProvider()),
