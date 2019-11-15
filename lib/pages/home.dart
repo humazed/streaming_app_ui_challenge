@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:streaming_app_ui_challange/star_button.dart';
+import 'package:provider/provider.dart';
+import 'package:streaming_app_ui_challange/pages/points_provider.dart';
+import 'package:streaming_app_ui_challange/widgets/star_button.dart';
 
-import 'generated/r.dart';
+import '../generated/r.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -126,25 +128,244 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget buildPost() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        buildPostTitle(),
+        SizedBox(height: 16),
+        buildPostImage(),
+        SizedBox(height: 16),
+        buildComments(),
+        buildPostInfo(),
+      ],
+    );
+  }
+
+  Row buildPostTitle() {
+    return Row(
+      children: <Widget>[
+        SizedBox(width: 16),
+        Flexible(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "NYC was fun but I'm back!",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(height: 8),
+              Flexible(
+                child: Wrap(
+                  direction: Axis.horizontal,
+                  children: <Widget>[
+                    Text(
+                      "32.1k views ",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFFB6BCBE),
+                      ),
+                    ),
+                    Text(
+                      "JinJuh ",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFB6BCBE),
+                      ),
+                    ),
+                    Text(
+                      "clipped 5g ago",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFFB6BCBE),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+//            Spacer(),
+        IconButton(icon: Icon(Icons.more_horiz), onPressed: () {}),
+        Container(
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              color: Color(0xFF333532), borderRadius: BorderRadius.circular(4)),
+          child: InkWell(
+            onTap: () {},
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.stars, color: Color(0xffffb054)),
+                SizedBox(width: 8),
+                Consumer<PointsProvider>(
+                  builder: (context, pointsProvider, _) {
+                    return Text(
+                      pointsProvider.myPoints.toString(),
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Color(0xffffb054),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(width: 16),
+      ],
+    );
+  }
+
+  SizedBox buildPostImage() {
+    return SizedBox(
+      height: 220,
+      child: Stack(
+        children: [
+          FractionallySizedBox(
+            widthFactor: 1,
+            child: Image.asset(
+              R.postPlaceholder,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Color(0xFF313B40).withOpacity(.9),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "#12 in Today's Top Clip Contest",
+                          style: TextStyle(),
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              '\$1k Prize Pool  ',
+                              style: TextStyle(
+                                color: Color(0xffffb054),
+                              ),
+                            ),
+                            Text(
+                              '3h 45m 32s  1,029 Entries',
+                              style: TextStyle(
+                                color: Color(0xFFB6BCBE),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Color(0xFF7F8689),
+                      size: 36,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildComments() {
     return Stack(
       children: <Widget>[
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            buildPostTitle(),
-            SizedBox(height: 16),
-            buildPostImage(),
-            SizedBox(height: 16),
-            buildComments(),
-            buildPostInfo(),
+        SizedBox(
+          height: 100,
+          child: Column(
+            children: [
+              buildComment(
+                'drg5',
+                commentSpans: [
+                  TextSpan(text: 'just liked this'),
+                  TextSpan(
+                    text: ' 100 ',
+                    style: TextStyle(
+                      color: Color(0xffffb054),
+                    ),
+                  ),
+                  TextSpan(text: 'times!'),
+                ],
+              ),
+              buildComment('ninja', comment: '💥💥💥💥💥💥💥'),
+              buildComment('yuierooo',
+                  comment: 'how do you even do that 🎉🎉🎉🎉🎉🎉🎉'),
+              buildComment('yuierooo', comment: 'im gon try that! ❤❤❤❤'),
+            ],
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 32,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF2E2E2E),
+                  Colors.transparent,
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget buildComment(String author,
+      {String comment, List<InlineSpan> commentSpans}) {
+    return Flexible(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: <Widget>[
+            SizedBox(width: 16),
+            Text(
+              author,
+              style: TextStyle(),
+            ),
+            SizedBox(width: 16),
+            Flexible(
+              child: comment == null
+                  ? RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          color: Color(0xFFB6BCBE),
+                        ),
+                        children: commentSpans,
+                      ),
+                    )
+                  : Text(
+                      comment,
+                      style: TextStyle(
+                        color: Color(0xFFB6BCBE),
+                      ),
+                    ),
+            ),
           ],
         ),
-        PositionedDirectional(
-          bottom: 0,
-          end: 0,
-          child: StarButton(),
-        ),
-      ],
+      ),
     );
   }
 
@@ -240,15 +461,21 @@ class HomePageState extends State<HomePage> {
                 SizedBox(width: 16),
                 Column(
                   children: [
-                    SizedBox(
-                      height: 64,
-                      width: 64,
+                    StarButton(
+                      onPressed: () {
+                        PointsProvider.of(context).givePoints(10);
+                      },
                     ),
-                    Text(
-                      '12.7k',
-                      style: TextStyle(
-                        color: Color(0xffffb054),
-                      ),
+                    SizedBox(height: 8),
+                    Consumer<PointsProvider>(
+                      builder: (context, pointsProvider, _) {
+                        return Text(
+                          pointsProvider.postPoints.toString(),
+                          style: TextStyle(
+                            color: Color(0xffffb054),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -257,230 +484,6 @@ class HomePageState extends State<HomePage> {
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget buildComments() {
-    return Stack(
-      children: <Widget>[
-        SizedBox(
-          height: 100,
-          child: Column(
-            children: [
-              buildComment(
-                'drg5',
-                commentSpans: [
-                  TextSpan(text: 'just liked this'),
-                  TextSpan(
-                    text: ' 100 ',
-                    style: TextStyle(
-                      color: Color(0xffffb054),
-                    ),
-                  ),
-                  TextSpan(text: 'times!'),
-                ],
-              ),
-              buildComment('ninja', comment: '💥💥💥💥💥💥💥'),
-              buildComment('yuierooo',
-                  comment: 'how do you even do that 🎉🎉🎉🎉🎉🎉🎉'),
-              buildComment('yuierooo', comment: 'im gon try that! ❤❤❤❤'),
-            ],
-          ),
-        ),
-        Positioned(
-          bottom: 0,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 32,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF2E2E2E),
-                  Colors.transparent,
-                ],
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-              ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget buildComment(String author,
-      {String comment, List<InlineSpan> commentSpans}) {
-    return Flexible(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          children: <Widget>[
-            SizedBox(width: 16),
-            Text(
-              author,
-              style: TextStyle(),
-            ),
-            SizedBox(width: 16),
-            Flexible(
-              child: comment == null
-                  ? RichText(
-                      text: TextSpan(
-                        style: TextStyle(
-                          color: Color(0xFFB6BCBE),
-                        ),
-                        children: commentSpans,
-                      ),
-                    )
-                  : Text(
-                      comment,
-                      style: TextStyle(
-                        color: Color(0xFFB6BCBE),
-                      ),
-                    ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  SizedBox buildPostImage() {
-    return SizedBox(
-      height: 220,
-      child: Stack(
-        children: [
-          FractionallySizedBox(
-            widthFactor: 1,
-            child: Image.asset(
-              R.postPlaceholder,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Color(0xFF313B40).withOpacity(.9),
-                ),
-                child: Row(
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "#12 in Today's Top Clip Contest",
-                          style: TextStyle(),
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              '\$1k Prize Pool  ',
-                              style: TextStyle(
-                                color: Color(0xffffb054),
-                              ),
-                            ),
-                            Text(
-                              '3h 45m 32s  1,029 Entries',
-                              style: TextStyle(
-                                color: Color(0xFFB6BCBE),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    Icon(
-                      Icons.chevron_right,
-                      color: Color(0xFF7F8689),
-                      size: 36,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Row buildPostTitle() {
-    return Row(
-      children: <Widget>[
-        SizedBox(width: 16),
-        Flexible(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "NYC was fun but I'm back!",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-              SizedBox(height: 8),
-              Flexible(
-                child: Wrap(
-                  direction: Axis.horizontal,
-                  children: <Widget>[
-                    Text(
-                      "32.1k views ",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFFB6BCBE),
-                      ),
-                    ),
-                    Text(
-                      "JinJuh ",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFB6BCBE),
-                      ),
-                    ),
-                    Text(
-                      "clipped 5g ago",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFFB6BCBE),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-//            Spacer(),
-        IconButton(icon: Icon(Icons.more_horiz), onPressed: () {}),
-        Container(
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-              color: Color(0xFF333532), borderRadius: BorderRadius.circular(4)),
-          child: InkWell(
-            onTap: () {},
-            child: Row(
-              children: <Widget>[
-                Icon(Icons.stars, color: Color(0xffffb054)),
-                SizedBox(width: 8),
-                Text(
-                  '1.3K',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Color(0xffffb054),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(width: 16),
       ],
     );
   }

@@ -1,31 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:streaming_app_ui_challange/button_bounce.dart';
-import 'package:streaming_app_ui_challange/floating_points.dart';
-import 'package:streaming_app_ui_challange/puls.dart';
-
-void main() {
-  runApp(
-    MaterialApp(
-      home: StarButtonDemo(),
-    ),
-  );
-}
-
-class StarButtonDemo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(''),
-      ),
-      body: Center(
-        child: StarButton(),
-      ),
-    );
-  }
-}
+import 'package:streaming_app_ui_challange/widgets/button_bounce.dart';
+import 'package:streaming_app_ui_challange/widgets/floating_points.dart';
+import 'package:streaming_app_ui_challange/widgets/pulse.dart';
 
 class StarButton extends StatefulWidget {
+  final VoidCallback onPressed;
+
+  const StarButton({Key key, this.onPressed}) : super(key: key);
+
   @override
   StarButtonState createState() => StarButtonState();
 }
@@ -38,7 +20,7 @@ class StarButtonState extends State<StarButton>
 
   Animation<double> pulseAnimation;
 
-  List<Widget> numbers = [];
+  List<FloatingNumber> numbers = [];
 
   @override
   void initState() {
@@ -90,24 +72,23 @@ class StarButtonState extends State<StarButton>
           direction: directions[selector],
         ));
       });
-      await Future.delayed(Duration(milliseconds: 200));
+      await Future.delayed(Duration(milliseconds: 300));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return SizedBox(
-      width: size.width / 2,
-      height: size.width ,
+      height: 44,
+      width: 44,
       child: Stack(
+        overflow: Overflow.visible,
         children: <Widget>[
           PositionedDirectional(
-            bottom: 46,
-            end: 24,
+            bottom: 0,
+            end: -2,
             child: SizedBox(
-              height: 300,
+              height: 100,
               width: 48,
               child: Stack(
                 children: numbers,
@@ -115,24 +96,26 @@ class StarButtonState extends State<StarButton>
             ),
           ),
           PositionedDirectional(
-            bottom: -28,
-            end: -48,
+            bottom: -128,
+            end: -128,
             child: CustomPaint(
               painter: PulsePainter(pulseAnimation),
               child: SizedBox(
-                width: size.width / 2,
-                height: size.width / 2,
+                width: 300,
+                height: 300,
               ),
             ),
           ),
           PositionedDirectional(
-            bottom: 46,
-            end: 24,
+            bottom: -2,
+            end: -2,
             child: AnimatedButton(
               onPressed: () {
+                widget.onPressed?.call();
+
                 _startPulseAnimation();
                 Stream.periodic(pulseAnimationDuration, (v) => v)
-                    .take(5)
+                    .take(10)
                     .listen((count) => _startPulseAnimation());
                 _showNumbers();
               },
@@ -142,4 +125,24 @@ class StarButtonState extends State<StarButton>
       ),
     );
   }
+}
+
+// for testing
+class StarButtonDemo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: StarButton(),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(
+    MaterialApp(
+      home: StarButtonDemo(),
+    ),
+  );
 }

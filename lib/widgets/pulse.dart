@@ -1,13 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(
-    MaterialApp(
-      home: SpriteDemo(),
-    ),
-  );
-}
-
 class PulsePainter extends CustomPainter {
   final Animation<double> _animation;
 
@@ -42,12 +34,13 @@ class PulsePainter extends CustomPainter {
   }
 }
 
+// for testing
 class SpriteDemo extends StatefulWidget {
   @override
-  SpriteDemoState createState() => SpriteDemoState();
+  PulseDemoState createState() => PulseDemoState();
 }
 
-class SpriteDemoState extends State<SpriteDemo>
+class PulseDemoState extends State<SpriteDemo>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
@@ -80,7 +73,6 @@ class SpriteDemoState extends State<SpriteDemo>
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Pulse')),
       body: Center(
         child: CustomPaint(
           painter: PulsePainter(_controller),
@@ -95,9 +87,16 @@ class SpriteDemoState extends State<SpriteDemo>
           Stream.periodic(animationDuration, (v) => v)
               .take(10)
               .listen((count) => _startAnimation());
-          },
-        child: Icon(Icons.play_arrow),
+        },
       ),
     );
   }
+}
+
+void main() {
+  runApp(
+    MaterialApp(
+      home: SpriteDemo(),
+    ),
+  );
 }

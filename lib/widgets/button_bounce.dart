@@ -1,23 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(
-    MaterialApp(
-      home: BounceDemo(),
-    ),
-  );
-}
-
-class BounceDemo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: AnimatedButton()),
-    );
-  }
-}
-
 class AnimatedButton extends StatefulWidget {
   final VoidCallback onPressed;
 
@@ -68,7 +51,10 @@ class _AnimatedButtonState extends State<AnimatedButton>
           scale: animation,
           child: FloatingActionButton(
             onPressed: _onTapDown,
-            child: Icon(Icons.star,color: Colors.white,),
+            child: Icon(
+              Icons.star,
+              color: Colors.white,
+            ),
             mini: true,
           ),
         );
@@ -82,4 +68,22 @@ class _AnimatedButtonState extends State<AnimatedButton>
     await _controller.forward();
     _controller.reset();
   }
+}
+
+// for testing
+class BounceDemo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(child: AnimatedButton()),
+    );
+  }
+}
+
+void main() {
+  runApp(
+    MaterialApp(
+      home: BounceDemo(),
+    ),
+  );
 }

@@ -1,57 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(
-    MaterialApp(
-      home: FloatingNumbersDemo(),
-    ),
-  );
-}
-
-class FloatingNumbersDemo extends StatefulWidget {
-  @override
-  FloatingNumbersDemoState createState() => FloatingNumbersDemoState();
-}
-
-class FloatingNumbersDemoState extends State<FloatingNumbersDemo> {
-  List<Widget> numbers = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(''),
-      ),
-      floatingActionButton: FloatingActionButton(onPressed: _onTapDown),
-      body: Center(
-        child: SizedBox(
-          height: 300,
-          width: 200,
-          child: Stack(
-            children: <Widget>[
-              ...numbers,
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future _onTapDown() async {
-    for (var i = 1; i < 11; ++i) {
-      setState(() {
-        var selector = (i - 1) % 10;
-        numbers.add(FloatingNumber(
-          number: i,
-          color: colors[selector],
-          direction: directions[selector],
-        ));
-      });
-      await Future.delayed(Duration(milliseconds: 100));
-    }
-  }
-}
-
 enum Direction { start, end }
 
 class FloatingNumber extends StatefulWidget {
@@ -90,7 +38,7 @@ class FloatingNumberState extends State<FloatingNumber>
     final dx = widget.direction == Direction.start ? -0.5 : 0.5;
 
     _slideAnimation =
-        Tween<Offset>(begin: Offset(dx, 7.0), end: Offset(dx, -10.0))
+        Tween<Offset>(begin: Offset(dx,0.0), end: Offset(dx, -10.0))
             .animate(_controller);
 
     _opacityAnimation = Tween<double>(begin: 1.0, end: 0.0)
@@ -149,3 +97,55 @@ const List<Color> colors = [
   Color(0xFFFF8C02),
   Color(0xFFFF58D6),
 ];
+
+
+
+// for testing
+class FloatingNumbersDemo extends StatefulWidget {
+  @override
+  FloatingNumbersDemoState createState() => FloatingNumbersDemoState();
+}
+
+class FloatingNumbersDemoState extends State<FloatingNumbersDemo> {
+  List<Widget> numbers = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: _onTapDown),
+      body: Center(
+        child: SizedBox(
+          height: 300,
+          width: 200,
+          child: Stack(
+            children: <Widget>[
+              ...numbers,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future _onTapDown() async {
+    for (var i = 1; i < 11; ++i) {
+      setState(() {
+        var selector = (i - 1) % 10;
+        numbers.add(FloatingNumber(
+          number: i,
+          color: colors[selector],
+          direction: directions[selector],
+        ));
+      });
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+  }
+}
+
+void main() {
+  runApp(
+    MaterialApp(
+      home: FloatingNumbersDemo(),
+    ),
+  );
+}
