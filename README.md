@@ -1,16 +1,15 @@
-# streaming_app_ui_challange
+# streaming_app_ui_challenge
 
-A new Flutter application.
+Streaming app UI challenge, with complex animation in the star button.
 
-## Getting Started
+## walkthrough (click to see the video)
+The artifacts in the video is just because of the video recording the actail app is very smooth.
 
-This project is a starting point for a Flutter application.
+[![Demo](repo_assets/steaming_app_show_case.gif?raw=true)](https://youtu.be/OZvJswfIh4s)
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+#### Third Party Libraries Used
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  * [provider][1] A dependency injection system built with widgets for widgets.
+
+[1]: https://pub.dev/packages/provider
